@@ -1,16 +1,24 @@
-import {Body, Controller, Get, Post, Req, UnprocessableEntityException, UseGuards} from '@nestjs/common';
-import {InjectModel} from "@nestjs/mongoose";
-import {User, UserDocument} from "../schemas/user.schema";
-import mongoose, {Model} from "mongoose";
-import {RegisterUserDto} from "./register-user.dto";
-import {AuthGuard} from "@nestjs/passport";
-import {Request} from "express";
+import {
+  Body,
+  Controller,
+  Delete,
+  Post,
+  Req,
+  UnprocessableEntityException,
+  UseGuards,
+} from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { User, UserDocument } from '../schemas/user.schema';
+import mongoose, { Model } from 'mongoose';
+import { RegisterUserDto } from './register-user.dto';
+import { AuthGuard } from '@nestjs/passport';
+import { Request } from 'express';
 
 @Controller('users')
 export class UsersController {
   constructor(
     @InjectModel(User.name)
-    private userModel: Model<UserDocument>
+    private userModel: Model<UserDocument>,
   ) {}
 
   @Post()
@@ -38,5 +46,11 @@ export class UsersController {
   @Post('sessions')
   async login(@Req() req: Request) {
     return req.user;
+  }
+
+  @UseGuards(AuthGuard)
+  @Delete('sessions')
+  async logout(@Req() req: Request) {
+    return 'logout';
   }
 }
