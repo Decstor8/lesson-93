@@ -1,6 +1,6 @@
-import {Prop, Schema, SchemaFactory} from "@nestjs/mongoose";
-import {Artist} from "./artists.schema";
-import mongoose, {Document} from "mongoose";
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Artist } from './artists.schema';
+import mongoose, { Document } from 'mongoose';
 
 @Schema()
 export class Album {

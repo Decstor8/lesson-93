@@ -1,21 +1,31 @@
-import {Body, Controller, Delete, Get, Param, Post, Query, UploadedFile, UseInterceptors} from '@nestjs/common';
-import {InjectModel} from "@nestjs/mongoose";
-import {Model} from "mongoose";
-import {Album, AlbumDocument} from "../schemas/albums.schema";
-import {CreateAlbumsDto} from "./create-albums.dto";
-import {FileInterceptor} from "@nestjs/platform-express";
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Query,
+  UploadedFile,
+  UseInterceptors,
+} from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { Album, AlbumDocument } from '../schemas/albums.schema';
+import { CreateAlbumsDto } from './create-albums.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('albums')
 export class AlbumsController {
   constructor(
     @InjectModel(Album.name)
-    private albumModel: Model<AlbumDocument>
+    private albumModel: Model<AlbumDocument>,
   ) {}
 
   @Get()
-  getAlbums(@Query('artistId') albumId: string) {
-    if (albumId) {
-      return this.albumModel.find({artist: albumId});
+  getAlbums(@Query('artistId') artistId: string) {
+    if (artistId) {
+      return this.albumModel.find({ artist: artistId });
     }
 
     return this.albumModel.find();
@@ -30,14 +40,13 @@ export class AlbumsController {
       message: 'album received successfully',
     };
   }
-
   @Post()
   @UseInterceptors(
-    FileInterceptor('image', {dest: './public/uploads/albums'})
+    FileInterceptor('image', { dest: './public/uploads/albums' }),
   )
   async createAlbum(
     @UploadedFile() file: Express.Multer.File,
-    @Body() albumDto: CreateAlbumsDto
+    @Body() albumDto: CreateAlbumsDto,
   ) {
     const album = new this.albumModel({
       artist: albumDto.artist,
@@ -46,7 +55,7 @@ export class AlbumsController {
       image: file ? '/uploads/albums/' + file.filename : null,
     });
 
-    return album.save();
+    return await album.save();
   }
 
   @Delete(':id')

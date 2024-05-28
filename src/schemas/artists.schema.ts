@@ -1,13 +1,16 @@
-import {Prop, Schema, SchemaFactory} from "@nestjs/mongoose";
-import {Document} from "mongoose";
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Document } from 'mongoose';
 
 @Schema()
 export class Artist {
-  @Prop({required: true, unique: true})
+  @Prop({ required: true, unique: true })
   name: string;
 
   @Prop()
   description: string;
+
+  @Prop()
+  image: string;
 }
 
 export const ArtistSchema = SchemaFactory.createForClass(Artist);
