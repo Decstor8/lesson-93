@@ -18,7 +18,7 @@ export class AuthGuard implements CanActivate {
       return false;
     }
 
-    const [_, jwtToken] = authHeader.split(' ');
+    const [, jwtToken] = authHeader.split(' ');
 
     if (!jwtToken) {
       return false;
