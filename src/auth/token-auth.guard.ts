@@ -1,25 +1,24 @@
-import { Injectable, CanActivate, ExecutionContext } from "@nestjs/common";
-import { InjectModel } from "@nestjs/mongoose";
-import { Model } from "mongoose";
-import { User, UserDocument } from "../schemas/user.schema";
+import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { User, UserDocument } from '../schemas/user.schema';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
-    @InjectModel(User.name) private readonly userRepo: Model<UserDocument>
-  ) {
-  }
+    @InjectModel(User.name) private readonly userRepo: Model<UserDocument>,
+  ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const httpRequest = context.switchToHttp().getRequest();
 
-    const authHeader = httpRequest.get("Authorization");
+    const authHeader = httpRequest.get('Authorization');
 
     if (!authHeader) {
       return false;
     }
 
-    const [_, jwtToken] = authHeader.split(" ");
+    const [_, jwtToken] = authHeader.split(' ');
 
     if (!jwtToken) {
       return false;
@@ -34,5 +33,5 @@ export class AuthGuard implements CanActivate {
     httpRequest.user = userRecord;
 
     return true;
-  };
+  }
 }
